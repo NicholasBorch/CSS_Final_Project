@@ -1,0 +1,12 @@
+# big / regenerable data — keep OUT of the repo (GitHub blocks >100 MB files)
+project_data/_cache/
+project_data/embeddings.npy
+project_data/D2_actors.csv
+project_data/D3_text.jsonl
+project_data/audit/
+
+# python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store
