@@ -234,11 +234,11 @@
 </div></header>
 
 <div class="matbar" id="materials"><div class="wrap">
-  <!-- EDIT-LINK: confirm the nbviewer branch/filename and set the shared-folder URL. -->
+  <!-- EDIT-LINK: confirm the nbviewer branch/filename matches your repo. -->
   <span class="ml">Materials</span>
   <a class="pill" href="https://github.com/NicholasBorch/CSS_Final_Project">↗ GitHub repository</a>
   <a class="pill" href="https://nbviewer.org/github/NicholasBorch/CSS_Final_Project/blob/main/CSS_Project_Explainer_Notebook.ipynb">↗ Explainer notebook (nbviewer)</a>
-  <a class="pill" href="https://github.com/NicholasBorch/CSS_Final_Project">↓ Full dataset (shared folder)</a>
+  <a class="pill" href="https://drive.google.com/drive/folders/1P6ZkfHmB4nqryST0gKkKy4HPwCFuKBa-">↓ Full dataset (shared folder)</a>
 </div></div>
 
 <section id="findings"><div class="wrap">
@@ -270,9 +270,20 @@
 </div></section>
 
 <section id="method"><div class="wrap">
-  <p class="eyebrow">How the analysis works</p>
-  <h2>The pipeline, step by step</h2>
-  <p class="sec-note">The analysis proceeds in sequence, following the structure of the notebook: assembling the data, describing it, constructing the networks, and then addressing four research questions. Throughout, each reported trend is compared against a randomised null model, so that an observed effect can be distinguished from an artefact of data collection.</p>
+  <p class="eyebrow">The research questions</p>
+  <h2>The analysis, step by step</h2>
+  <p class="sec-note">The project focuses on three research questions. The analysis assembles the data, describes it, constructs the networks, and then works through the three questions in sequence, before a final bridging analysis. Throughout, each reported trend is compared against a randomised null model, so that an observed effect can be distinguished from an artefact of data collection.</p>
+  <div class="rqs">
+    <div class="rq"><span class="tag">RQ1</span><div>
+      <h3>The globalisation gap</h3>
+      <p>Did cinema globalise in collaboration (who works with whom) and in storytelling (what films are about) at the same pace, or is there a gap between the two?</p></div></div>
+    <div class="rq"><span class="tag">RQ2</span><div>
+      <h3>National fingerprints</h3>
+      <p>What makes each national cinema distinctive, and is that distinctiveness fading as cinema globalises?</p></div></div>
+    <div class="rq"><span class="tag">RQ3</span><div>
+      <h3>Actor communities</h3>
+      <p>Are the actor communities created by actor collaborations indicative of thematic content of global films?</p></div></div>
+  </div>
   <div class="steps">
     <div class="step"><div class="n">1</div><div><h3>Data collection</h3>
       <p>We seed from a curated ranked film list, enrich each film with TMDB metadata and its full billed cast, resolve its plot through Wikidata and Wikipedia, and represent that text as 384-dimensional embedding vectors. Production country, known for almost every film, is the primary attribute; less complete signals such as actor birthplace are used only as flagged cross-checks.</p>
@@ -295,7 +306,7 @@
     <div class="step"><div class="n">7</div><div><h3>Community structure — Part 3</h3>
       <p>Louvain detection partitions each network into communities, which we compare to production country using adjusted mutual information. Collaboration communities are strongly national; thematic communities are largely not.</p>
       <div class="tags"><span class="tag">Louvain</span><span class="tag">modularity</span><span class="tag">AMI</span></div></div></div>
-    <div class="step"><div class="n">8</div><div><h3>Bridging the lenses — Part 4</h3>
+    <div class="step"><div class="n">8</div><div><h3>Bridging the lenses — final analysis</h3>
       <p>Finally we ask whether collaboration predicts content beyond the nationality the two already share. A country-conditioned null isolates that question, and a small but statistically robust association remains.</p>
       <div class="tags"><span class="tag">conditioned null</span><span class="tag">trend tests</span></div></div></div>
   </div>
@@ -372,7 +383,8 @@ const NOTES = {
 const PASS_NOTE = "The TF-IDF is computed over the same films at three filtering levels, changing only what is removed between passes. <b>Pass 1 (raw)</b> removes nothing, and person names get boosted because they have very low document frequency but high local term frequency, so the wordclouds are dominated by names like jack, joe, marie, jean, vijay. <b>Pass 2 (named)</b> drops stopwords and person names but keeps places and nationalities, so place names dominate every cinematic fingerprint: london, british, england for the UK; tokyo, japan, japanese for Japan; paris, french, france for France. <b>Pass 3 (thematic)</b> additionally strips toponyms and demonyms, and with the place names removed the thematic layer beneath emerges: Japan as shogunate, assassins, samurai, seppuku; Italy as fascists, communist, peasants; Germany as nazi, jews, jewish, persecution; India as caste, hindu, muslim; Hong Kong as shaolin, defeat, revenge, jianghu; Spain as francoist, basque, republican, nationalist. Pass 3 is the canonical pass for the analytical work.";
 
 const FIG = (typeof FIGURES !== "undefined" && FIGURES) ? FIGURES : null;
-const ST  = (FIG && FIG.sections) ? FIG.sections : [];
+const EXCLUDE = /films_overview/i;   // genre distribution + top-25 keywords figure: not shown
+const ST  = (FIG && FIG.sections) ? FIG.sections.map(s=>({...s, figures:(s.figures||[]).filter(f=>!EXCLUDE.test(f.src))})) : [];
 const DEC = (FIG && FIG.decades)  ? FIG.decades  : [];
 const HERO_RE = /(_pair|grid_)/i;
 const byDec = (a,b)=>parseInt(a)-parseInt(b);
@@ -406,7 +418,7 @@ function renderCenterStack(figs){
     `<img loading="lazy" src="${esc(f.src)}" alt="${esc(f.caption)}"><figcaption>${esc(f.caption)}</figcaption></figure>`).join("")}</div>`;
 }
 
-// fingerprints: three passes in focus, every country plot shown in a grid, analytic plots large below
+// fingerprints: three passes in focus, country plots hidden behind a toggle, analytic plots large below
 function renderFingerprints(sec){
   const figs=sec.figures;
   const passes = figs.filter(f=>/pass\d/i.test(f.src)).sort((a,b)=>(a.src.match(/pass(\d)/i)[1])-(b.src.match(/pass(\d)/i)[1]));
@@ -415,7 +427,9 @@ function renderFingerprints(sec){
   let html = `<p class="sec-note">${PASS_NOTE}</p>`;
   if(passes.length) html += `<div class="passgrid">${passes.map(card).join("")}</div>`;
   if(countries.length){
-    html += `<div class="countrygrid">${countries.map(card).join("")}</div>`;
+    const gid="fpc"+(GID++); const n=countries.length;
+    html += `<button class="more" data-target="${gid}" aria-expanded="false">＋&nbsp; Show ${n} individual country plots</button>`+
+      `<div class="rowwrap" id="${gid}" data-n="${n}">${rowHTML(countries,"small")}</div>`;
   }
   if(analytic.length){
     html += `<div class="below">${analytic.map(f=>`<figure class="card feature" data-src="${esc(f.src)}" data-cap="${esc(f.caption)}">`+

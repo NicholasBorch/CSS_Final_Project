@@ -9,10 +9,6 @@ const FIGURES = {
           "caption": "Actors"
         },
         {
-          "src": "project_data/figures/stats/films_by_decade.png",
-          "caption": "Films by decade"
-        },
-        {
           "src": "project_data/figures/stats/films_overview.png",
           "caption": "Films overview"
         },
