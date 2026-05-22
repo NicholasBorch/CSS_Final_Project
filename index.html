@@ -1,0 +1,567 @@
+<!--
+  CSS FINAL PROJECT — World Cinema · project website
+  Builds from figures.js (run gen_figures_manifest.py to regenerate).
+  Edit prose: FINDINGS cards, methodology steps, NOTES + PASS_NOTE, EDIT-LINK urls.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Globalisation of World Cinema</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,500&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4f0e8; --paper-2:#ece5d8; --card:#fffdf8;
+    --ink:#1c1814; --ink-soft:#615847; --ink-faint:#9b9281;
+    --accent:#b1432c; --accent-deep:#7c2d1e; --accent-wash:#efe0d4;
+    --line:#dcd3c2; --line-soft:#e7dfd0; --wide:1280px; --read:66ch;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth; scroll-padding-top:64px}
+  body{margin:0; background:var(--paper); color:var(--ink);
+    font-family:"Newsreader",Georgia,serif; font-size:1.16rem; line-height:1.6; -webkit-font-smoothing:antialiased}
+  .wrap{max-width:var(--wide); margin:0 auto; padding:0 32px}
+  a{color:var(--accent-deep); text-underline-offset:3px}
+  h1,h2,h3{font-family:"Fraunces",Georgia,serif; line-height:1.05; letter-spacing:-.015em; font-weight:600}
+  p{margin:0 0 1.1em}
+  .label{font-family:"Archivo",system-ui,sans-serif; text-transform:uppercase; letter-spacing:.16em; font-weight:600}
+
+  .nav{position:sticky; top:0; z-index:80; background:rgba(244,240,232,.9); backdrop-filter:blur(10px); border-bottom:1px solid var(--line)}
+  .nav .wrap{display:flex; align-items:center; gap:4px; padding:11px 32px}
+  .nav .brand{font-family:"Fraunces"; font-weight:600; font-size:1.04rem; margin-right:auto}
+  .nav a{font-family:"Archivo",sans-serif; font-size:.72rem; text-transform:uppercase; letter-spacing:.1em; color:var(--ink-soft); text-decoration:none; padding:7px 13px; border-radius:30px; transition:.15s}
+  .nav a:hover{background:var(--accent-wash); color:var(--accent-deep)}
+
+  .hero{padding:92px 0 70px; border-bottom:1px solid var(--line)}
+  .hero .tagrow{display:flex; gap:14px; align-items:center; margin-bottom:28px}
+  .hero .tagrow .label{font-size:.72rem; color:var(--accent-deep)}
+  .hero .tagrow .rule{flex:1; height:1px; background:var(--line)}
+  .hero h1{font-size:clamp(2.6rem,6.4vw,5rem); font-weight:900; margin:0 0 .3em; letter-spacing:-.025em}
+  .hero h1 .it{font-style:italic; font-weight:500; color:var(--accent)}
+  .hero .sub{font-size:clamp(1.18rem,2vw,1.42rem); color:var(--ink-soft); max-width:48ch; line-height:1.5}
+  .hero .by{margin-top:32px; font-family:"Archivo",sans-serif; font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-faint)}
+
+  section{padding:72px 0; border-bottom:1px solid var(--line)}
+  .eyebrow{font-family:"Archivo",sans-serif; text-transform:uppercase; letter-spacing:.18em; font-size:.7rem; font-weight:600; color:var(--accent-deep); margin:0 0 14px}
+  h2{font-size:clamp(1.7rem,3.6vw,2.5rem); margin:0 0 .5em}
+  .sec-note{color:var(--ink-soft); max-width:none; margin:0 0 26px; font-size:1.1rem}
+  .sec-note b{font-weight:500; color:var(--ink)}
+
+  .findings{display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:28px}
+  .find{background:var(--card); border:1px solid var(--line); border-radius:8px; padding:30px 26px}
+  .find .n{font-family:"Fraunces"; font-size:2.4rem; font-weight:900; color:var(--accent); line-height:.8}
+  .find h3{font-size:1.2rem; margin:18px 0 10px}
+  .find p{font-size:1rem; color:var(--ink-soft); margin:0; line-height:1.5}
+  @media(max-width:820px){ .findings{grid-template-columns:1fr} }
+
+  /* dataset: lead prose + by-the-numbers band */
+  .ds-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:2px 40px; margin-top:30px; border-top:1px solid var(--line)}
+  .ds-stat{padding:22px 0; border-bottom:1px solid var(--line)}
+  .ds-stat .num{font-family:"Fraunces"; font-weight:900; font-size:clamp(1.9rem,3.4vw,2.7rem); color:var(--accent); line-height:.9; letter-spacing:-.02em}
+  .ds-stat .lab{font-family:"Archivo",sans-serif; text-transform:uppercase; letter-spacing:.1em; font-size:.7rem; font-weight:600; color:var(--ink-soft); margin-top:9px; line-height:1.35}
+  @media(max-width:820px){ .ds-grid{grid-template-columns:1fr 1fr} }
+  @media(max-width:520px){ .ds-grid{grid-template-columns:1fr} }
+
+  /* conclusions: research-question blocks + caveat */
+  .rqs{display:grid; gap:20px; margin-top:26px}
+  .rq{background:var(--card); border:1px solid var(--line); border-radius:8px; padding:24px 26px; display:grid; grid-template-columns:74px 1fr; gap:20px; align-items:start}
+  .rq .tag{align-self:start; margin:2px 0 0}
+  .rq h3{font-size:1.12rem; margin:0 0 .35em}
+  .rq p{margin:0; color:var(--ink-soft); font-size:1rem; line-height:1.55}
+  .caveat{margin-top:26px; border-left:3px solid var(--accent); padding:4px 0 4px 22px; color:var(--ink-soft); max-width:none}
+  .caveat b{font-weight:500; color:var(--ink)}
+  @media(max-width:560px){ .rq{grid-template-columns:1fr; gap:10px} }
+
+  /* visible country-fingerprint grid (Part 2) */
+  .countrygrid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:20px 0}
+  .countrygrid .card img{height:auto; max-height:420px; width:100%; object-fit:contain}
+  .countrygrid .card:hover{box-shadow:0 14px 32px rgba(40,30,20,.14); border-color:var(--accent-wash)}
+  @media(max-width:820px){ .countrygrid{grid-template-columns:1fr 1fr} }
+  @media(max-width:520px){ .countrygrid{grid-template-columns:1fr} }
+
+  /* top materials bar */
+  .matbar{border-bottom:1px solid var(--line); background:var(--paper)}
+  .matbar .wrap{display:flex; flex-wrap:wrap; align-items:center; gap:10px; padding:18px 32px}
+  .matbar .ml{font-family:"Archivo",sans-serif; text-transform:uppercase; letter-spacing:.16em; font-size:.7rem; font-weight:600; color:var(--accent-deep); margin-right:8px}
+  .matbar .pill{margin:0}
+
+  /* methodology — two columns to compress vertically */
+  .steps{display:grid; grid-template-columns:repeat(2,1fr); gap:2px 48px; margin-top:24px}
+  .step{display:grid; grid-template-columns:50px 1fr; gap:18px; padding:22px 0; border-top:1px solid var(--line); align-items:start}
+  .step .n{font-family:"Fraunces"; font-weight:900; font-size:1.4rem; color:var(--accent); border:1px solid var(--accent-wash); background:var(--card); border-radius:50%; width:46px; height:46px; display:flex; align-items:center; justify-content:center}
+  .step h3{font-size:1.16rem; margin:.1em 0 .35em}
+  .step p{margin:0; color:var(--ink-soft); font-size:.99rem; line-height:1.5}
+  .tags{margin-top:11px; display:flex; flex-wrap:wrap; gap:7px}
+  .tag{font-family:"Archivo",sans-serif; font-size:.66rem; letter-spacing:.06em; text-transform:uppercase; font-weight:600; color:var(--accent-deep); background:var(--accent-wash); border-radius:30px; padding:4px 11px}
+  @media(max-width:820px){ .steps{grid-template-columns:1fr; gap:0} }
+
+  /* teaser tapes */
+  .tapelabel{font-family:"Archivo",sans-serif; text-transform:uppercase; letter-spacing:.14em; font-size:.68rem;
+    font-weight:600; color:var(--ink-faint); max-width:var(--wide); margin:20px auto 0; padding:0 32px}
+  .teaser{overflow:hidden; position:relative; padding:6px 0;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+  .tape{display:flex; gap:18px; width:max-content; animation:slide 80s linear infinite}
+  .tape.rev{animation:slideRev 80s linear infinite}
+  .teaser:hover .tape{animation-play-state:paused}
+  @keyframes slide{from{transform:translateX(0)} to{transform:translateX(-50%)}}
+  @keyframes slideRev{from{transform:translateX(-50%)} to{transform:translateX(0)}}
+  .tcell{flex:0 0 300px; position:relative; cursor:zoom-in; border:1px solid var(--line); border-radius:8px;
+    background:var(--card); overflow:hidden; opacity:.72; transition:opacity .25s, box-shadow .25s; margin:0}
+  .tcell.grid{flex:0 0 380px}
+  .tcell:hover{opacity:1; box-shadow:0 12px 30px rgba(40,30,20,.16)}
+  .tcell img{width:100%; height:188px; object-fit:cover; object-position:center top; display:block}
+  .tyear{position:absolute; top:9px; left:12px; font-family:"Fraunces"; font-weight:900; font-size:1.35rem; color:#fff; text-shadow:0 1px 7px rgba(0,0,0,.6); z-index:2}
+
+  /* chapters */
+  .chapter .ch-head{display:flex; align-items:baseline; gap:22px; margin-bottom:14px}
+  .ch-n{font-family:"Fraunces"; font-weight:900; font-size:clamp(2.4rem,5vw,3.6rem); color:var(--accent); line-height:.8; letter-spacing:-.03em}
+  .chapter h2{margin:0}
+
+  /* decade toggle */
+  .toggle{display:flex; gap:7px; flex-wrap:wrap; margin:6px 0 24px}
+  .dbtn{cursor:pointer; font-family:"Archivo",sans-serif; font-size:.82rem; letter-spacing:.03em; border:1px solid var(--line); background:var(--card); color:var(--ink-soft); padding:8px 16px; border-radius:30px; transition:.15s}
+  .dbtn:hover{border-color:var(--accent); color:var(--accent-deep)}
+  .dbtn.active{background:var(--accent); color:#fff; border-color:var(--accent)}
+
+  /* rows */
+  .row{position:relative; margin:0 -4px}
+  .track{display:flex; gap:16px; overflow-x:auto; scroll-behavior:smooth; align-items:flex-start;
+    padding:14px 4px 20px; scrollbar-width:thin; scrollbar-color:var(--line) transparent}
+  .track::-webkit-scrollbar{height:8px}
+  .track::-webkit-scrollbar-thumb{background:var(--line); border-radius:8px}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:8px; overflow:hidden; cursor:zoom-in; margin:0; transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease}
+  .track .card{flex:0 0 360px}
+  .track.big .card{flex:0 0 640px}      /* plain sections: larger */
+  .track.small .card{flex:0 0 290px}    /* drill-down details: compact */
+  .track .card:hover{transform:scale(1.04); box-shadow:0 16px 36px rgba(40,30,20,.16); border-color:var(--accent-wash); position:relative; z-index:4}
+  .card img{display:block; width:100%; background:#fff}
+  .track .card img{height:300px; object-fit:contain}
+  .track.big .card img{height:412px}
+  .track.small .card img{height:178px}
+  .card figcaption{font-family:"Archivo",sans-serif; text-transform:uppercase; letter-spacing:.07em; font-size:.7rem; font-weight:600; color:var(--ink-faint); padding:12px 15px; border-top:1px solid var(--line-soft); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+
+  /* full-bleed row: scrolls edge to edge of the viewport; first card aligns with content */
+  .row.bleed{width:100vw; margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw)}
+  .row.bleed .track{padding-left:max(32px, calc((100vw - var(--wide))/2 + 32px));
+    padding-right:max(32px, calc((100vw - var(--wide))/2 + 32px))}
+
+  /* centred single-figure stack (network: AMI + degree distributions) */
+  .centerstack{display:grid; gap:24px; margin-top:8px}
+  .centerstack .card{max-width:940px; margin:0 auto; width:100%}
+  .centerstack .card img{width:100%; height:auto; max-height:560px; object-fit:contain}
+  .centerstack .card.tall{max-width:780px; max-height:740px; overflow:auto}
+  .centerstack .card.tall img{max-height:none}
+  .centerstack .card:hover{box-shadow:0 14px 32px rgba(40,30,20,.12); border-color:var(--accent-wash)}
+  .centerstack .card figcaption{white-space:normal}
+
+  /* featured hero (pair / grid) */
+  .solo{margin:4px 0 2px}
+  .solo .card{max-width:100%}
+  .solo .card:hover{box-shadow:0 16px 40px rgba(40,30,20,.13); border-color:var(--accent-wash)}
+  .solo .card img{height:auto; max-height:560px; object-fit:contain}
+  .solo .card figcaption{white-space:normal}
+
+  /* tall figure (e.g. degree distributions): scrollable feature panel */
+  .tallhost{margin-top:8px}
+  .card.feature{cursor:zoom-in; background:var(--card)}
+  .card.feature img{height:auto; width:100%; object-fit:contain}
+  .card.feature.tall{max-width:760px; margin:0 auto; max-height:720px; overflow:auto}
+  .card.feature figcaption{white-space:normal}
+
+  /* fingerprints: three passes in focus + analytic below */
+  .passgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:2px 0}
+  .passgrid .card img{height:auto; max-height:600px; width:100%; object-fit:contain}
+  .passgrid .card:hover{box-shadow:0 14px 32px rgba(40,30,20,.14); border-color:var(--accent-wash)}
+  @media(max-width:820px){ .passgrid{grid-template-columns:1fr} }
+  .below{display:grid; gap:22px; margin-top:24px}
+  .below .card{max-width:920px; margin:0 auto; width:100%}
+  .below .card img{max-height:540px}
+  .below .card:hover{box-shadow:0 14px 32px rgba(40,30,20,.12); border-color:var(--accent-wash)}
+
+  /* row arrows */
+  .rownav{position:absolute; top:14px; bottom:20px; width:46px; border:0; cursor:pointer; background:rgba(255,253,248,.86); color:var(--ink); font-size:1.5rem; line-height:1; z-index:6; opacity:0; transition:opacity .18s; border-radius:8px}
+  .row:hover .rownav{opacity:1}
+  .rownav:hover{background:var(--card); box-shadow:0 4px 14px rgba(40,30,20,.14)}
+  .rownav.prev{left:0} .rownav.next{right:0}
+  .row.bleed .rownav.prev{left:max(8px, calc((100vw - var(--wide))/2 + 8px))}
+  .row.bleed .rownav.next{right:max(8px, calc((100vw - var(--wide))/2 + 8px))}
+  @media(hover:none){ .rownav{display:none} }
+
+  .rowwrap{display:none; margin-top:10px}
+  .rowwrap.open{display:block}
+  .more{font-family:"Archivo",sans-serif; font-size:.74rem; text-transform:uppercase; letter-spacing:.1em; font-weight:600; cursor:pointer; margin-top:12px; color:var(--accent-deep); background:none; border:1px solid var(--line); border-radius:30px; padding:9px 18px; transition:.15s}
+  .more:hover{background:var(--accent-wash); border-color:var(--accent)}
+  .dv-h{font-family:"Fraunces"; font-size:1.3rem; color:var(--accent-deep); margin:32px 0 14px; padding-bottom:9px; border-bottom:1px solid var(--line)}
+  .dv-h:first-child{margin-top:4px}
+  .empty{background:var(--card); border:1px dashed var(--line); border-radius:8px; padding:26px; color:var(--ink-faint)}
+  code{background:var(--paper-2); padding:2px 6px; border-radius:4px; font-size:.84em; font-family:ui-monospace,monospace}
+
+  .pill{display:inline-block; font-family:"Archivo",sans-serif; font-size:.82rem; border:1px solid var(--line); background:var(--card); border-radius:30px; padding:11px 20px; margin:6px 8px 6px 0; color:var(--ink); text-decoration:none; transition:.15s}
+  .pill:hover{border-color:var(--accent); color:var(--accent-deep)}
+  footer{padding:56px 0 88px; color:var(--ink-faint); font-family:"Archivo",sans-serif; font-size:.78rem; letter-spacing:.04em}
+
+  .lb{position:fixed; inset:0; background:rgba(20,16,12,.94); display:none; z-index:1000; align-items:center; justify-content:center; flex-direction:column; padding:34px}
+  .lb.open{display:flex}
+  .lb img{max-width:94vw; max-height:82vh; object-fit:contain; background:#fff; border-radius:5px}
+  .lb .lbcap{font-family:"Archivo",sans-serif; text-transform:uppercase; letter-spacing:.1em; font-size:.78rem; color:#e9e1d4; margin-top:16px; text-align:center}
+  .lb button{position:absolute; background:none; border:0; color:#fff; font-size:2.1rem; cursor:pointer; opacity:.65; line-height:1}
+  .lb button:hover{opacity:1}
+  .lb .x{top:20px; right:28px} .lb .prev{left:26px; top:50%} .lb .next{right:26px; top:50%}
+</style>
+</head>
+<body>
+
+<nav class="nav"><div class="wrap">
+  <span class="brand">World Cinema</span>
+  <a href="#findings">Findings</a>
+  <a href="#dataset">Dataset</a>
+  <a href="#method">Method</a>
+  <a href="#chapters">Chapters</a>
+  <a href="#collection">Collection</a>
+  <a href="#conclusions">Conclusions</a>
+  <a href="#materials">Materials</a>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <div class="tagrow"><span class="label">Computational Social Science · Final project</span><span class="rule"></span></div>
+  <h1>The globalisation of <span class="it">world cinema</span></h1>
+  <p class="sub">A network and text analysis of roughly 22,000 films across a century of cinema, examining decade by decade whether film collaboration and film content became cross-national at the same rate.</p>
+  <p class="by">Nicholas Borch (s234841) &amp; Robin Braagaard (s234856) · Data · TheyShootPictures, TMDB &amp; Wikipedia</p>
+</div></header>
+
+<div class="matbar" id="materials"><div class="wrap">
+  <!-- EDIT-LINK: confirm the nbviewer branch/filename and set the shared-folder URL. -->
+  <span class="ml">Materials</span>
+  <a class="pill" href="https://github.com/NicholasBorch/CSS_Final_Project">↗ GitHub repository</a>
+  <a class="pill" href="https://nbviewer.org/github/NicholasBorch/CSS_Final_Project/blob/main/CSS_Project_Explainer_Notebook.ipynb">↗ Explainer notebook (nbviewer)</a>
+  <a class="pill" href="https://github.com/NicholasBorch/CSS_Final_Project">↓ Full dataset (shared folder)</a>
+</div></div>
+
+<section id="findings"><div class="wrap">
+  <p class="eyebrow">Key findings</p>
+  <h2>Summary of results</h2>
+  <div class="findings">
+    <div class="find"><div class="n">01</div><h3>The gap exists, and it is inverted</h3>
+      <p>Thematic ties cross borders in every decade, but co-starring ties almost never do. Cross-national edge share peaks at 16% on the collaboration side and stays above 35% on the thematic side throughout. Both move toward integration, but from opposite starting points: storytelling was already global, collaboration catches up slowly, carried by a minority of boundary-spanning actors who hold a disproportionate share of the network's structural connectivity.</p></div>
+    <div class="find"><div class="n">02</div><h3>Collaboration predicts content mostly through nationality</h3>
+      <p>AMI(collaboration, theme) ≈ 0.15, of which the country-conditioned null accounts for 0.115. For our dataset, country explains 77% of the apparent link, and collaboration adds 23%. Co-starring communities are national; thematic communities are not; what little collaboration tells you about theme is mostly what nationality already told you.</p></div>
+    <div class="find"><div class="n">03</div><h3>Distinctiveness is real but fading</h3>
+      <p>National cinemas carry distinctive vocabularies above the size-matched null in nearly every country–decade. The mean declines from ~0.10 in the 1930s to near zero by the 2020s, indicating convergence toward a shared global vocabulary. The caveat being that with ρ = −0.85 against plot length, much of the apparent fade may be uniform Wikipedia coverage rather than thematic convergence.</p></div>
+  </div>
+</div></section>
+
+<section id="dataset"><div class="wrap">
+  <p class="eyebrow">What we built it from</p>
+  <h2>The dataset</h2>
+  <p class="sec-note">The dataset should attribute every film to a national cinema reliably, list each film's full cast, and carry text rich enough to extract themes from. Finding a single public source containing this is practically impossible, therefore a step-wise dataset collection from three complementary sources is performed. <b>TheyShootPictures</b> gives century-wide coverage with lessened bias in terms of recency and western dominance; <b>TMDB</b> gives the structured cast that the co-starring network is built on; and <b>Wikipedia</b> gives the plots and themes texts behind the embeddings and the TF-IDF analysis. Actor birth-places were initially thought to be the backbone indication of actor nationality, but due to mainstream celebrity information sites being biased towards popular western actors, the actor nationality nodes were instead determined by the majority production country behind their movies.</p>
+  <div class="ds-grid">
+    <div class="ds-stat"><div class="num">~22,000</div><div class="lab">Films analysed across<br>a century, 1920s–2020s</div></div>
+    <div class="ds-stat"><div class="num">3</div><div class="lab">Sources stitched together<br>TSP · TMDB · Wikipedia</div></div>
+    <div class="ds-stat"><div class="num">~259,700</div><div class="lab">Cast records linking<br>actors to their films</div></div>
+    <div class="ds-stat"><div class="num">~19,700</div><div class="lab">Plot &amp; theme texts,<br>the basis of the text analysis</div></div>
+    <div class="ds-stat"><div class="num">11</div><div class="lab">Decades, each with its own<br>co-starring network</div></div>
+    <div class="ds-stat"><div class="num">~155 MB</div><div class="lab">Assembled dataset, on top<br>of ~552 MB of API cache</div></div>
+  </div>
+  <p class="sec-note" style="margin-top:30px">The country distribution is starkly long-tailed and Anglophone-skewed: the USA alone produces ~8,400 films, more than the next four countries combined, with France, the UK, Japan, and Italy forming the rest of the top five. The decade distribution rises monotonically to a peak in the 2000s of around 3,500 films. Whether this is viewed as a property of the world being measured, or a limitation of a Western-biased source, can of course be debated — both are most likely true in some sense.</p>
+</div></section>
+
+<section id="method"><div class="wrap">
+  <p class="eyebrow">How the analysis works</p>
+  <h2>The pipeline, step by step</h2>
+  <p class="sec-note">The analysis proceeds in sequence, following the structure of the notebook: assembling the data, describing it, constructing the networks, and then addressing four research questions. Throughout, each reported trend is compared against a randomised null model, so that an observed effect can be distinguished from an artefact of data collection.</p>
+  <div class="steps">
+    <div class="step"><div class="n">1</div><div><h3>Data collection</h3>
+      <p>We seed from a curated ranked film list, enrich each film with TMDB metadata and its full billed cast, resolve its plot through Wikidata and Wikipedia, and represent that text as 384-dimensional embedding vectors. Production country, known for almost every film, is the primary attribute; less complete signals such as actor birthplace are used only as flagged cross-checks.</p>
+      <div class="tags"><span class="tag">APIs</span><span class="tag">caching</span><span class="tag">embeddings</span></div></div></div>
+    <div class="step"><div class="n">2</div><div><h3>Basic statistics</h3>
+      <p>Before any modelling we examine the shape of the data: films per decade, producing countries, and cast-size and plot-length distributions. This is also where a collection artefact was identified and corrected, by requiring a co-starring tie to rest on at least two shared films rather than a single appearance.</p>
+      <div class="tags"><span class="tag">distributions</span><span class="tag">coverage</span></div></div></div>
+    <div class="step"><div class="n">3</div><div><h3>Build the collaboration network</h3>
+      <p>For each decade we link two actors who appeared together in at least two films, weighting the edge by the number of shared films, and tag each actor with the country in which they primarily worked. The result is a per-decade representation of on-screen collaboration.</p>
+      <div class="tags"><span class="tag">graph construction</span><span class="tag">weighted edges</span></div></div></div>
+    <div class="step"><div class="n">4</div><div><h3>Measure the gap — Part 1</h3>
+      <p>We measure how within-national each side is using country assortativity and the share of links that cross a border, on the collaboration graph and on a film-similarity graph built from plot vectors. Each value is benchmarked against a permutation null, so a rising cross-border share is not simply the result of more countries entering the data over time.</p>
+      <div class="tags"><span class="tag">assortativity</span><span class="tag">permutation null</span></div></div></div>
+    <div class="step"><div class="n">5</div><div><h3>Brokers &amp; corridors — Part 1</h3>
+      <p>This step examines how cross-national collaboration occurs. Betweenness centrality identifies the internationally active actors that connect otherwise separate parts of the network, and the analysis traces the dominant country-to-country corridors that account for most cross-border casting.</p>
+      <div class="tags"><span class="tag">betweenness</span><span class="tag">corridors</span></div></div></div>
+    <div class="step"><div class="n">6</div><div><h3>National fingerprints — Part 2</h3>
+      <p>Using TF-IDF over each country's pooled plot text, we surface the words a national cinema over-uses relative to world cinema. A size-matched null reports distinctiveness above noise, and a confound check guards against shorter plot summaries appearing more distinctive.</p>
+      <div class="tags"><span class="tag">TF-IDF</span><span class="tag">NER</span><span class="tag">size-matched null</span></div></div></div>
+    <div class="step"><div class="n">7</div><div><h3>Community structure — Part 3</h3>
+      <p>Louvain detection partitions each network into communities, which we compare to production country using adjusted mutual information. Collaboration communities are strongly national; thematic communities are largely not.</p>
+      <div class="tags"><span class="tag">Louvain</span><span class="tag">modularity</span><span class="tag">AMI</span></div></div></div>
+    <div class="step"><div class="n">8</div><div><h3>Bridging the lenses — Part 4</h3>
+      <p>Finally we ask whether collaboration predicts content beyond the nationality the two already share. A country-conditioned null isolates that question, and a small but statistically robust association remains.</p>
+      <div class="tags"><span class="tag">conditioned null</span><span class="tag">trend tests</span></div></div></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <p class="eyebrow">At a glance</p>
+  <h2>A century of cinema in three layers</h2>
+  <p class="sec-note">Three views, one per decade, scrolling automatically (hover to pause, click to enlarge): the distinctive vocabularies of <b>thematic story communities</b>, the <b>co-starring networks</b> themselves, and the vocabularies of <b>collaboration communities</b>. The full analysis follows in the chapters below; the complete per-decade set is also in the collection at the end.</p>
+</div>
+  <div class="tapelabel">Thematic story communities</div>
+  <div class="teaser"><div class="tape rev" id="tapeTop"></div></div>
+  <div class="tapelabel">Co-starring networks</div>
+  <div class="teaser"><div class="tape" id="tapeMid"></div></div>
+  <div class="tapelabel">Collaboration communities</div>
+  <div class="teaser"><div class="tape rev" id="tapeBot"></div></div>
+</section>
+
+<span id="chapters"></span><div id="galleries"></div>
+
+<section id="collection"><div class="wrap">
+  <p class="eyebrow">Collection</p>
+  <h2>Browse every figure by decade</h2>
+  <p class="sec-note">A complete archive of the per-decade figures. Select a decade to view its figures in the order of the chapters above; the combined pair and grid plots are shown first, with the individual versions available via <em>Show individual plots</em>.</p>
+  <div class="toggle" id="collNav"></div>
+  <div id="collView"></div>
+</div></section>
+
+<section id="conclusions"><div class="wrap">
+  <p class="eyebrow">Do the trends hold up statistically</p>
+  <h2>Conclusions</h2>
+  <p class="sec-note">Each decade's value is benchmarked against a null, but that only tells us whether a single decade departs from chance and not whether the direction across decades is real. A Spearman rank test against decade fixes this: a strong ρ backs a "rose" or "fell" claim, a weak one says soften it. The partial 2020s is excluded so an incomplete decade doesn't distort the slope.</p>
+  <div class="rqs">
+    <div class="rq"><span class="tag">ρ +0.75</span><div>
+      <h3>Collaboration cross-national share</h3>
+      <p>The fraction of co-starring ties that link actors from different national cinemas. p = 0.008. Rises across the century; safe to claim.</p></div></div>
+    <div class="rq"><span class="tag">ρ +0.81</span><div>
+      <h3>Theme cross-national share</h3>
+      <p>The fraction of film-similarity ties that link films from different national cinemas. p = 0.003. Rises across the century; safe to claim.</p></div></div>
+    <div class="rq"><span class="tag">ρ +0.70</span><div>
+      <h3>Boundary-spanner share</h3>
+      <p>The fraction of actors with at least one foreign-cinema co-star. p = 0.017. Rises across the century; safe to claim.</p></div></div>
+    <div class="rq"><span class="tag">ρ +0.33</span><div>
+      <h3>Cross-national betweenness share</h3>
+      <p>The fraction of total betweenness centrality held by boundary-spanning actors. p = 0.33. Jumps early (1920s → 1950s) then sits in the 0.3–0.6 range. The shape is real but not monotonic, so the test can't certify a trend.</p></div></div>
+    <div class="rq"><span class="tag">ρ −0.81</span><div>
+      <h3>Mean national distinctiveness</h3>
+      <p>How far each country's TF-IDF fingerprint sits from the global mean, averaged across countries per decade. p = 0.001. Falls across the century; safe to claim.</p></div></div>
+  </div>
+  <p class="caveat">Four of the five load-bearing trends survive. The fifth is consistent with the rest but cannot be defended as monotonic on its own. The project asks about world cinema, but the dataset is the slice of world cinema visible to three Western-curated, English-language sources. Country–decades with shorter plot summaries are reliably the more distinctive ones, and the longest-plot groups cluster near zero excess; the magnitudes of the distinctiveness numbers, and the steepness of the fading trend, are most likely driven a lot by Wikipedia coverage becoming more uniform over time rather than national cinemas converging thematically.</p>
+</div></section>
+
+<footer><div class="wrap">The Globalisation of World Cinema — CSS final project · data from TheyShootPictures, TMDB &amp; Wikipedia.</div></footer>
+
+<div class="lb" id="lb">
+  <button class="x" onclick="closeLb()">×</button>
+  <button class="prev" onclick="stepLb(-1)">‹</button>
+  <button class="next" onclick="stepLb(1)">›</button>
+  <img id="lbImg" alt=""><div class="lbcap" id="lbCap"></div>
+</div>
+
+<script src="figures.js" onerror="window.__figerr=1"></script>
+<script>
+const NOTES = {
+  stats:"Before any modelling we describe what was collected and display how the data spreads across decades and countries. The decade distribution rises monotonically to a peak in the 2000s of around 3,500 films. The country distribution is starkly long-tailed and Anglophone-skewed: the USA alone produces ~8,400 films, more than the next four countries combined. The films-per-actor distribution shows a classic heavy-tailed power-law shape, where ~150,000 actors appear in only one film in the corpus, and the median actor appears in only 1 film.",
+  network:"Each node is an actor, and two actors are linked when they appeared together in a film made in that decade, with edge weight equal to the number of shared films. We build the network at two co-starring thresholds (k≥2 and k≥3 shared appearances) so we can later confirm the headline findings do not depend on the cutoff. Every dense blob is almost a single colour, so the co-starring network sorts overwhelmingly by national cinema. The combined pair view is shown for each decade; the k≥2 and k≥3 versions can be opened below it.",
+  part1:"The cross-national fraction runs 0.007 → 0.164 for collaboration but 0.49 → 0.63 for content. Evidence suggests that storytelling was cross-national from the start, while casting was almost entirely within-nation and only began to open from the 1960s. The coverage panel confirms that text coverage is high and roughly flat across the century, so the thematic curve does not rest on a collapsing sample.",
+  brokers:"Collaboration in world cinema is strongly nationally segregated throughout the century, with country assortativity above 0.94 from the 1920s through the 1970s and a measured but partial decline from the 1980s (r = 0.87) to the 2000s (r = 0.78). The integration that does exist is carried by a small internationally mobile minority: by mid-century, around half of the network's shortest-path traffic routes through actors whose co-stars span multiple national cinemas, even while fewer than 20% of actors are themselves boundary-spanning. Whatever globalisation of casting happens, it happens through brokers, not through a broad-based mixing of the workforce.",
+  fingerprints:"For each national cinema we pool the text descriptions of its films and compute TF-IDF against the whole corpus, thereby finding words that are distinct to it, relative to world cinema. National distinctiveness above the size-matched null is positive for nearly every country–decade where it can be measured, and the mean across countries declines from ~0.10 in the 1930s to near zero by the 2020s. Country–decades with shorter plot summaries are reliably the more distinctive ones, so the magnitudes of the distinctiveness numbers, and the steepness of the fading trend, are most likely driven a lot by Wikipedia coverage becoming more uniform over time rather than national cinemas converging thematically.",
+  communities_thematic:"The thematic graph partitions 14,365 films into 355 Louvain communities with modularity 0.783, signifying strong community structure. AMI(thematic, country) = 0.153, which is a lot lower than the actor-side AMI in every decade. Thematic communities are cluster structure, but the clusters are not national. Genres persist across decades with stable vocabulary. The grid is shown first; the individual community word clouds can be opened below it.",
+  communities_collab:"AMI(community, country) rises from ~0.52 in the 1920s to a peak of 0.74 in the 1950s, holds above 0.69 through the 1970s, then declines steadily through the rest of the century to 0.29 in the 2020s. Some communities look to have thematically coherent vocabularies (Hong Kong 1980s with martial arts terms, India 1970s with religious/caste drama, Japan 1960s with samurai vocabulary), which is consistent with national cinemas that specialize in specific genres. The grid is shown first; the individual community word clouds can be opened below it.",
+  bridge:"The original AMI(collab, theme) is small (≈ 0.15). When we shuffle within country, it drops a little, so country explains most of why collaboration and theme look correlated. However, there is a small bit left over that country can't explain, so actor collaborations do carry a little bit of thematic information independently: country does ~77% of the work, collaboration adds ~23% on top."
+};
+const PASS_NOTE = "The TF-IDF is computed over the same films at three filtering levels, changing only what is removed between passes. <b>Pass 1 (raw)</b> removes nothing, and person names get boosted because they have very low document frequency but high local term frequency, so the wordclouds are dominated by names like jack, joe, marie, jean, vijay. <b>Pass 2 (named)</b> drops stopwords and person names but keeps places and nationalities, so place names dominate every cinematic fingerprint: london, british, england for the UK; tokyo, japan, japanese for Japan; paris, french, france for France. <b>Pass 3 (thematic)</b> additionally strips toponyms and demonyms, and with the place names removed the thematic layer beneath emerges: Japan as shogunate, assassins, samurai, seppuku; Italy as fascists, communist, peasants; Germany as nazi, jews, jewish, persecution; India as caste, hindu, muslim; Hong Kong as shaolin, defeat, revenge, jianghu; Spain as francoist, basque, republican, nationalist. Pass 3 is the canonical pass for the analytical work.";
+
+const FIG = (typeof FIGURES !== "undefined" && FIGURES) ? FIGURES : null;
+const ST  = (FIG && FIG.sections) ? FIG.sections : [];
+const DEC = (FIG && FIG.decades)  ? FIG.decades  : [];
+const HERO_RE = /(_pair|grid_)/i;
+const byDec = (a,b)=>parseInt(a)-parseInt(b);
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
+let GID = 0;
+
+const card = f => `<figure class="card" data-src="${esc(f.src)}" data-cap="${esc(f.caption)}">`+
+  `<img loading="lazy" src="${esc(f.src)}" alt="${esc(f.caption)}"><figcaption>${esc(f.caption)}</figcaption></figure>`;
+const rowHTML = (figs,size="",rowClass="") => `<div class="row ${rowClass}"><button class="rownav prev" data-dir="-1" aria-label="scroll left">‹</button>`+
+  `<div class="track ${size}">${figs.map(card).join("")}</div>`+
+  `<button class="rownav next" data-dir="1" aria-label="scroll right">›</button></div>`;
+
+// hero (pair/grid) large; individual plots behind a button. plain & standalone sets render centred.
+function renderGroup(figs){
+  if(!figs.length) return "";
+  const heroes  = figs.filter(f=>HERO_RE.test(f.src));
+  const details = figs.filter(f=>!HERO_RE.test(f.src));
+  if(heroes.length && details.length){
+    const gid="det"+(GID++); const n=details.length;
+    return `<div class="solo">${heroes.map(card).join("")}</div>`+
+      `<button class="more" data-target="${gid}" aria-expanded="false">＋&nbsp; Show ${n} individual plot${n>1?"s":""}</button>`+
+      `<div class="rowwrap" id="${gid}" data-n="${n}">${rowHTML(details,"small")}</div>`;
+  }
+  return renderCenterStack(figs);
+}
+
+// centred single-figure stack (used for the network section's standalone plots)
+function renderCenterStack(figs){
+  if(!figs.length) return "";
+  return `<div class="centerstack">${figs.map(f=>`<figure class="card" data-src="${esc(f.src)}" data-cap="${esc(f.caption)}">`+
+    `<img loading="lazy" src="${esc(f.src)}" alt="${esc(f.caption)}"><figcaption>${esc(f.caption)}</figcaption></figure>`).join("")}</div>`;
+}
+
+// fingerprints: three passes in focus, every country plot shown in a grid, analytic plots large below
+function renderFingerprints(sec){
+  const figs=sec.figures;
+  const passes = figs.filter(f=>/pass\d/i.test(f.src)).sort((a,b)=>(a.src.match(/pass(\d)/i)[1])-(b.src.match(/pass(\d)/i)[1]));
+  const countries = figs.filter(f=>/country_/i.test(f.src));
+  const analytic = figs.filter(f=>!/pass\d|country_/i.test(f.src));
+  let html = `<p class="sec-note">${PASS_NOTE}</p>`;
+  if(passes.length) html += `<div class="passgrid">${passes.map(card).join("")}</div>`;
+  if(countries.length){
+    html += `<div class="countrygrid">${countries.map(card).join("")}</div>`;
+  }
+  if(analytic.length){
+    html += `<div class="below">${analytic.map(f=>`<figure class="card feature" data-src="${esc(f.src)}" data-cap="${esc(f.caption)}">`+
+      `<img loading="lazy" src="${esc(f.src)}" alt="${esc(f.caption)}"><figcaption>${esc(f.caption)}</figcaption></figure>`).join("")}</div>`;
+  }
+  return html;
+}
+
+/* teaser: three strips — thematic grids (top), network pairs (mid), collab grids (bottom) */
+function buildTape(){
+  const sectionEl=document.getElementById("tapeMid").closest("section");
+  const pick=(id,re)=>{const s=ST.find(x=>x.id===id); return s? s.figures.filter(f=>re.test(f.src)&&f.decade).sort((a,b)=>byDec(a.decade,b.decade)) : [];};
+  const net = pick("network", /_pair/i);
+  const them = pick("communities_thematic", /grid_/i);
+  const coll = pick("communities_collab", /grid_/i);
+  if(!net.length && !them.length && !coll.length){ if(sectionEl) sectionEl.style.display="none"; return; }
+  const cell=(f,cls="")=>`<figure class="tcell card ${cls}" data-src="${esc(f.src)}" data-cap="${esc(f.caption)}"><span class="tyear">${f.decade}</span><img loading="lazy" src="${esc(f.src)}" alt="${esc(f.caption)}"></figure>`;
+  const fill=(elId,figs,cls)=>{
+    const el=document.getElementById(elId);
+    const lab=el.closest(".teaser").previousElementSibling;
+    if(!figs.length){ el.closest(".teaser").style.display="none"; if(lab&&lab.classList.contains("tapelabel")) lab.style.display="none"; return; }
+    const html=figs.map(f=>cell(f,cls)).join("");
+    el.innerHTML=html+html;   // duplicate for a seamless loop
+  };
+  fill("tapeTop", them, "grid");
+  fill("tapeMid", net,  "");
+  fill("tapeBot", coll, "grid");
+}
+
+/* chapters in notebook order */
+function buildSections(){
+  const root=document.getElementById("galleries");
+  if(!ST.length){
+    root.insertAdjacentHTML("beforeend",
+      '<section><div class="wrap"><p class="eyebrow">Figures</p><h2>Figures load here</h2>'+
+      '<div class="empty">Run <code>python gen_figures_manifest.py</code> to create <code>figures.js</code> next to this file, then refresh.</div></div></section>');
+    return;
+  }
+  ST.forEach((sec,si)=>{
+    const ch=String(si+1).padStart(2,"0");
+    let inner = NOTES[sec.id] ? `<p class="sec-note">${NOTES[sec.id]}</p>` : "";
+    let bodyId="", dated=[];
+    if(sec.id==="fingerprints"){
+      inner += renderFingerprints(sec);
+    } else {
+      const undated=sec.figures.filter(f=>!f.decade);
+      dated=sec.figures.filter(f=>f.decade);
+      const decs=[...new Set(dated.map(f=>f.decade))].sort(byDec);
+      if(undated.length) inner += (sec.id==="network") ? renderCenterStack(undated) : renderGroup(undated);
+      if(decs.length){
+        bodyId="body"+si;
+        inner += `<div class="toggle" data-body="${bodyId}">`+
+          decs.map((d,i)=>`<button class="dbtn${i===0?" active":""}" data-dec="${d}">${d}</button>`).join("")+
+          `</div><div id="${bodyId}">${renderGroup(dated.filter(f=>f.decade===decs[0]))}</div>`;
+      }
+    }
+    const s=document.createElement("section"); s.className="chapter";
+    s.innerHTML=`<div class="wrap"><div class="ch-head"><span class="ch-n">${ch}</span><h2>${esc(sec.title)}</h2></div>${inner}</div>`;
+    root.appendChild(s);
+    if(bodyId){
+      const tog=s.querySelector(".toggle");
+      tog.addEventListener("click",e=>{
+        const b=e.target.closest("button.dbtn"); if(!b)return;
+        tog.querySelectorAll(".dbtn").forEach(x=>x.classList.toggle("active",x===b));
+        document.getElementById(bodyId).innerHTML = renderGroup(dated.filter(f=>f.decade===b.dataset.dec));
+      });
+    }
+  });
+}
+
+/* bottom collection: decade picker */
+function buildCollection(){
+  const nav=document.getElementById("collNav");
+  if(!DEC.length){
+    document.getElementById("collView").innerHTML='<div class="empty">No per-decade figures detected.</div>'; return;
+  }
+  nav.innerHTML=DEC.map((d,i)=>`<button class="dbtn${i===0?" active":""}" data-dec="${d}">${d}</button>`).join("");
+  nav.addEventListener("click",e=>{
+    const b=e.target.closest("button.dbtn"); if(!b)return;
+    nav.querySelectorAll(".dbtn").forEach(x=>x.classList.toggle("active",x===b));
+    renderColl(b.dataset.dec);
+  });
+  renderColl(DEC[0]);
+}
+function renderColl(d){
+  let html="";
+  ST.forEach(sec=>{
+    const figs=sec.figures.filter(f=>f.decade===d);
+    if(figs.length) html += `<h3 class="dv-h">${esc(sec.title)}</h3>` + renderGroup(figs);
+  });
+  document.getElementById("collView").innerHTML = html || `<div class="empty">No figures tagged ${d}.</div>`;
+}
+
+/* relocate very tall figures into a readable, scrollable feature panel */
+function decorate(){
+  // tall images inside scrolling rows -> pull out into a centred scrollable panel
+  document.querySelectorAll(".track .card img").forEach(img=>{
+    if(img.dataset.tc) return; img.dataset.tc="1";
+    const go=()=>{
+      if(img.naturalWidth && img.naturalHeight/img.naturalWidth > 1.5){
+        const fig=img.closest(".card"), row=img.closest(".row"); if(!row) return;
+        fig.classList.add("feature","tall");
+        let host=row.nextElementSibling;
+        if(!(host && host.classList.contains("tallhost"))){ host=document.createElement("div"); host.className="tallhost"; row.after(host); }
+        host.appendChild(fig);
+      }
+    };
+    if(img.complete && img.naturalWidth) go(); else img.addEventListener("load",go,{once:true});
+  });
+  // tall images already in the centred stack -> just mark them scrollable
+  document.querySelectorAll(".centerstack .card img").forEach(img=>{
+    if(img.dataset.tc) return; img.dataset.tc="1";
+    const go=()=>{ if(img.naturalWidth && img.naturalHeight/img.naturalWidth > 1.5) img.closest(".card").classList.add("tall"); };
+    if(img.complete && img.naturalWidth) go(); else img.addEventListener("load",go,{once:true});
+  });
+}
+
+/* clicks */
+let FLAT=[], lbAt=0;
+document.addEventListener("click",e=>{
+  const nav=e.target.closest(".rownav");
+  if(nav){ const t=nav.parentElement.querySelector(".track"); t.scrollBy({left:Number(nav.dataset.dir)*Math.max(t.clientWidth*0.8,320),behavior:"smooth"}); return; }
+  const more=e.target.closest(".more");
+  if(more){
+    const w=document.getElementById(more.dataset.target);
+    const open=w.classList.toggle("open");
+    more.setAttribute("aria-expanded", open?"true":"false");
+    const n=w.dataset.n, isC=more.textContent.includes("country");
+    more.innerHTML=(open?"–":"＋")+"&nbsp; "+(open?"Hide":"Show")+" "+n+(isC?" individual country plot":" individual plot")+(n>1?"s":"");
+    return;
+  }
+  const c=e.target.closest(".card"); if(!c)return;
+  const cards=[...document.querySelectorAll(".card")].filter(x=>x.offsetParent!==null);
+  FLAT=cards.map(x=>({src:x.dataset.src,cap:x.dataset.cap}));
+  lbAt=cards.indexOf(c); showLb(); document.getElementById("lb").classList.add("open");
+});
+function showLb(){ document.getElementById("lbImg").src=FLAT[lbAt].src; document.getElementById("lbCap").textContent=FLAT[lbAt].cap; }
+function closeLb(){ document.getElementById("lb").classList.remove("open"); }
+function stepLb(n){ lbAt=(lbAt+n+FLAT.length)%FLAT.length; showLb(); }
+document.addEventListener("keydown",e=>{ if(!document.getElementById("lb").classList.contains("open"))return; if(e.key==="Escape")closeLb(); if(e.key==="ArrowLeft")stepLb(-1); if(e.key==="ArrowRight")stepLb(1); });
+document.getElementById("lb").addEventListener("click",e=>{ if(e.target.id==="lb")closeLb(); });
+
+buildTape();
+buildSections();
+buildCollection();
+decorate();
+</script>
+</body>
+</html>
